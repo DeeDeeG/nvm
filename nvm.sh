@@ -3616,10 +3616,8 @@ nvm_supports_xz() {
     if [ $MACOS_VERSION -lt "010009000" ]; then
       return 1
     fi
-  fi
-
-  # GNU tar can extract xz if the `xz` executable is on the $PATH
-  if [ -n "$(tar --version | grep -o 'GNU')" ] && ! command which xz >/dev/null 2>&1; then
+  # Cautiously assume other operating systems require an xz executable on the PATH
+  elif ! command which xz >/dev/null 2>&1; then
     return 1
   fi
 
