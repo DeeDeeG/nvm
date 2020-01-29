@@ -3530,7 +3530,7 @@ nvm() {
         nvm_has_system_node nvm_has_system_iojs \
         nvm_download nvm_get_latest nvm_has nvm_install_default_packages nvm_get_default_packages \
         nvm_curl_use_compression nvm_curl_version \
-        nvm_supports_source_options nvm_auto nvm_supports_xz \
+        nvm_supports_source_options nvm_auto nvm_platform_supports_xz nvm_supports_xz \
         nvm_echo nvm_err nvm_grep nvm_cd \
         nvm_die_on_prefix nvm_get_make_jobs nvm_get_minor_version \
         nvm_has_solaris_binary nvm_is_merged_node_version \
@@ -3605,8 +3605,25 @@ EOF
   )" = "_yes" ]
 }
 
+nvm_platform_supports_xz() {
+  nvm_echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
+  local QUICKBROWNFOX_SHASUM
+  QUICKBROWNFOX_SHASUM="$(nvm_compute_checksum /tmp/nvm_quickbrownfox.txt 2>/dev/null)"
+  command tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null >&2
+  command tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
+  local EXIT_CODE
+  nvm_compare_checksum /tmp/nvm_extracted.txt "${QUICKBROWNFOX_SHASUM}" 2>/dev/null
+  EXIT_CODE="${?}"
+  command rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_extracted.txt /tmp/nvm_quickbrownfox.txt
+  return "${EXIT_CODE}"
+}
+
 nvm_supports_xz() {
-  if [ -z "${1-}" ] || ! command which xz >/dev/null 2>&1; then
+  if [ -z "${1-}" ]; then
+    return 1
+  fi
+
+  if ! nvm_platform_supports_xz; then
     return 1
   fi
 
