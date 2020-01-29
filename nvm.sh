@@ -3530,7 +3530,7 @@ nvm() {
         nvm_has_system_node nvm_has_system_iojs \
         nvm_download nvm_get_latest nvm_has nvm_install_default_packages nvm_get_default_packages \
         nvm_curl_use_compression nvm_curl_version \
-        nvm_supports_source_options nvm_auto nvm_supports_xz \
+        nvm_supports_source_options nvm_auto nvm_platform_supports_xz nvm_supports_xz \
         nvm_echo nvm_err nvm_grep nvm_cd \
         nvm_die_on_prefix nvm_get_make_jobs nvm_get_minor_version \
         nvm_has_solaris_binary nvm_is_merged_node_version \
@@ -3605,8 +3605,33 @@ EOF
   )" = "_yes" ]
 }
 
+nvm_platform_supports_xz() {
+  # Hexadecimal dump of an xz-compressed tarball,
+  # containing the ASCII letter "a" in a .txt file
+  local HEX
+  HEX="fd377a585a000000ff12d941020021011c00000010cf58cce027ff005e5d \
+       00308033501868893016d4ad2bdb3532d1da8f479c58fcef72b55c25ec10 \
+       25db8c681c0ba8af1ac193f8c507ecb9f7c7d76ca240f07b7d799a48d587 \
+       01dc01f719f8b4298006e5a81cdeb5427fea090f8c2593d9c438578ad6c8 \
+       03418cef00000000000172805000000027c754ffa8000afc020000000000 \
+       595a"
+
+  local EXTRACTED_STRING
+  EXTRACTED_STRING="$(nvm_echo "${HEX}" | command xxd -r -p | command tar xJ -O)"
+
+  if [ "$EXTRACTED_STRING" = "a" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 nvm_supports_xz() {
-  if [ -z "${1-}" ] || ! command which xz >/dev/null 2>&1; then
+  if [ -z "${1-}" ]; then
+    return 1
+  fi
+
+  if ! nvm_platform_supports_xz; then
     return 1
   fi
 
