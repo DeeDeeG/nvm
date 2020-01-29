@@ -3606,7 +3606,18 @@ EOF
 }
 
 nvm_supports_xz() {
-  if [ -z "${1-}" ] || ! command which xz >/dev/null 2>&1; then
+  if [ -z "${1-}" ]; then
+    return 1
+  fi
+
+  # macOS 10.9.0 and later support extracting xz with tar
+  if [ "$(nvm_get_os)" = "darwin" ]; then
+    MACOS_VERSION="$(sw_vers -productVersion)"
+    if nvm_version_greater "10.9.0" "${MACOS_VERSION}"; then
+      return 1
+    fi
+  # Conservatively assume other operating systems require an xz executable on the PATH
+  elif ! command which xz >/dev/null 2>&1; then
     return 1
   fi
 
