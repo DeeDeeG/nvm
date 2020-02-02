@@ -3611,7 +3611,7 @@ nvm_supports_xz() {
   fi
 
   # macOS 10.9.0 and later support extracting xz with tar
-  if [ "$(nvm_get_os)" = "darwin" ]; then
+  if [ "$(nvm_get_os)" = 'darwin' ]; then
     MACOS_VERSION="$(sw_vers -productVersion)"
     if nvm_version_greater "10.9.0" "${MACOS_VERSION}"; then
       return 1
