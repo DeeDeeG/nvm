@@ -3605,20 +3605,30 @@ EOF
   )" = "_yes" ]
 }
 
+nvm_platform_supports_xz() {
+  if ! nvm_has tar; then return 1; fi
+  if ! nvm_has shasum; then return 1; fi
+  if ! nvm_has cut; then return 1; fi
+
+  echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
+  FIRST_SHASUM="$(shasum /tmp/nvm_quickbrownfox.txt | cut -d ' ' -f 1)"
+  tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null
+  tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
+  SECOND_SHASUM="$(shasum /tmp/nvm_extracted.txt | cut -d ' ' -f 1)"
+  rm /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
+  if [ "${FIRST_SHASUM}" = "${SECOND_SHASUM}" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 nvm_supports_xz() {
   if [ -z "${1-}" ]; then
     return 1
   fi
 
-  # macOS 10.9.0 and later support extracting xz with tar
-  if [ "$(nvm_get_os)" = 'darwin' ]; then
-    local MACOS_VERSION
-    MACOS_VERSION="$(sw_vers -productVersion)"
-    if nvm_version_greater "10.9.0" "${MACOS_VERSION}"; then
-      return 1
-    fi
-  # Conservatively assume other operating systems require an xz executable on the PATH
-  elif ! command which xz >/dev/null 2>&1; then
+  if ! nvm_platform_supports_xz; then
     return 1
   fi
 
