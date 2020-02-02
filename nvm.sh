@@ -3606,14 +3606,14 @@ EOF
 }
 
 nvm_platform_supports_xz() {
-  echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
+  nvm_echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
   local FIRST_SHASUM
   FIRST_SHASUM="$(nvm_compute_checksum /tmp/nvm_quickbrownfox.txt 2>/dev/null)"
-  tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null
-  tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
+  command tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null >&2
+  command tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
   local SECOND_SHASUM
   SECOND_SHASUM="$(nvm_compute_checksum /tmp/nvm_extracted.txt 2>/dev/null)"
-  rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
+  command rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
   if [ "${FIRST_SHASUM}" = "${SECOND_SHASUM}" ]; then
     return 0
   else
