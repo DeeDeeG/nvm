@@ -23,6 +23,7 @@ mkdir -p $TEST_PATH
 ln -s /usr/bin/which $TEST_PATH/which
 ln -s /usr/bin/command $TEST_PATH/command
 ln -s /usr/bin/awk $TEST_PATH/awk
+ln -s /usr/bin/uname $TEST_PATH/uname
 ln -s $(which rm) $TEST_PATH/rm
 
 export PATH=$TEST_PATH
