@@ -3607,18 +3607,15 @@ EOF
 
 nvm_platform_supports_xz() {
   nvm_echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
-  local FIRST_SHASUM
-  FIRST_SHASUM="$(nvm_compute_checksum /tmp/nvm_quickbrownfox.txt 2>/dev/null)"
   command tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null >&2
   command tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
-  local SECOND_SHASUM
-  SECOND_SHASUM="$(nvm_compute_checksum /tmp/nvm_extracted.txt 2>/dev/null)"
-  command rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
-  if [ "${FIRST_SHASUM}" = "${SECOND_SHASUM}" ]; then
-    return 0
-  else
-    return 1
-  fi
+  local QUICKBROWNFOX_SHASUM
+  QUICKBROWNFOX_SHASUM="$(nvm_compute_checksum /tmp/nvm_quickbrownfox.txt 2>/dev/null)"
+  local MATCH_STATUS
+  nvm_compare_checksum /tmp/nvm_extracted.txt "${QUICKBROWNFOX_SHASUM}" 2>/dev/null
+  MATCH_STATUS="${?}"
+  command rm -f /tmp/{nvm_xz_test.tar.xz,nvm_extracted.txt,nvm_quickbrownfox.txt}
+  return "${MATCH_STATUS}"
 }
 
 nvm_supports_xz() {
