@@ -3613,7 +3613,7 @@ nvm_platform_supports_xz() {
   tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
   local SECOND_SHASUM
   SECOND_SHASUM="$(nvm_compute_checksum /tmp/nvm_extracted.txt 2>/dev/null)"
-  rm /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
+  rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt /tmp/nvm_extracted.txt
   if [ "${FIRST_SHASUM}" = "${SECOND_SHASUM}" ]; then
     return 0
   else
