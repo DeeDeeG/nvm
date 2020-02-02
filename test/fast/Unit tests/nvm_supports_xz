@@ -14,8 +14,7 @@ die () { echo "$@" ; cleanup ; exit 1; }
 OLDPATH=$PATH
 
 mkdir -p $TEST_PATH
-touch ../../xz-test/xz
-chmod +x ../../xz-test/xz
+ln -s /usr/bin/xz $TEST_PATH/xz
 
 export PATH=$TEST_PATH:$PATH
 
