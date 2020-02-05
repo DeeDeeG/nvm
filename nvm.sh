@@ -3606,16 +3606,18 @@ EOF
 }
 
 nvm_platform_supports_xz() {
-  nvm_echo "The quick brown fox jumped over the lazy dog." > /tmp/nvm_quickbrownfox.txt
-  local QUICKBROWNFOX_SHASUM
-  QUICKBROWNFOX_SHASUM="$(nvm_compute_checksum /tmp/nvm_quickbrownfox.txt 2>/dev/null)"
-  command tar cJf /tmp/nvm_xz_test.tar.xz /tmp/nvm_quickbrownfox.txt 2>/dev/null >&2
-  command tar xJf /tmp/nvm_xz_test.tar.xz -O >/tmp/nvm_extracted.txt 2>/dev/null
-  local EXIT_CODE
-  nvm_compare_checksum /tmp/nvm_extracted.txt "${QUICKBROWNFOX_SHASUM}" 2>/dev/null
-  EXIT_CODE="${?}"
-  command rm -f /tmp/nvm_xz_test.tar.xz /tmp/nvm_extracted.txt /tmp/nvm_quickbrownfox.txt
-  return "${EXIT_CODE}"
+  local QUICK_BROWN_FOX
+  QUICK_BROWN_FOX="The quick brown fox jumped over the lazy dog."
+  nvm_echo "${QUICK_BROWN_FOX}" > /tmp/nvm_quickbrownfox.txt
+  local EXTRACTED_STRING
+  EXTRACTED_STRING="$(command tar cJ /tmp/nvm_quickbrownfox.txt 2>/dev/null | command tar xJ -O 2>/dev/null)"
+  command rm -f /tmp/nvm_quickbrownfox.txt
+
+  if [ "$EXTRACTED_STRING" = "$QUICK_BROWN_FOX" ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 nvm_supports_xz() {
