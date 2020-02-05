@@ -1,6 +1,6 @@
+os: linux
 language: generic
 dist: xenial
-sudo: required
 addons:
   apt:
     packages:
@@ -41,7 +41,7 @@ env:
     - PATH="$(echo $PATH | sed 's/::/:/')"
     - PATH="/usr/lib/ccache/:$PATH"
     - NVM_DIR="${TRAVIS_BUILD_DIR}"
-  matrix:
+  jobs:
     - MAKE_RELEASE=true
     - DOCTOCCHECK=true
     - SHELLCHECK=true
