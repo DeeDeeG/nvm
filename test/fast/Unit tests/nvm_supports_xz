@@ -1,11 +1,11 @@
 #!/bin/sh
 
-which tar
-command -v tar
-command -V tar
-type tar
-tar --version
-type -aP tar
+which tar >&2
+command -v tar >&2
+command -V tar >&2
+type tar >&2
+tar --version >&2
+type -aP tar >&2
 
 OLDPATH=$PATH
 TEST_PATH=../../xz-test
