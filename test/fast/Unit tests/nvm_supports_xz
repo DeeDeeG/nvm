@@ -27,9 +27,9 @@ ln -s $(which rm) $TEST_PATH/rm
 ln -s /usr/bin/tar $TEST_PATH/tar
 
 # liblzma provides xz support on macOS, so hide it for now
-if [ -n "$(uname -s | grep -io darwin)" ]; then
-  mv /usr/lib/liblzma.5.dylib /usr/lib/liblzma.5.dylib.backup
-fi
+#if [ -n "$(uname -s | grep -io darwin)" ]; then
+#  mv /usr/lib/liblzma.5.dylib /usr/lib/liblzma.5.dylib.backup
+#fi
 
 export PATH=$TEST_PATH
 
@@ -38,9 +38,9 @@ EXIT_STATUS="$(nvm_supports_xz 'v2.3.2')"
 export PATH=$OLDPATH
 
 # restore liblzma to its original location/filename
-if [ -n "$(uname -s | grep -io darwin)" ]; then
-  mv /usr/lib/liblzma.5.dylib.backup /usr/lib/liblzma.5.dylib
-fi
+#if [ -n "$(uname -s | grep -io darwin)" ]; then
+#  mv /usr/lib/liblzma.5.dylib.backup /usr/lib/liblzma.5.dylib
+#fi
 
 if [ "$EXIT_STATUS" = "0" ]; then
   die "expected 'nvm_supports_xz v2.3.2' with a missing xz binary to exit with 1"
