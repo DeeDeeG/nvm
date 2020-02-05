@@ -1,5 +1,12 @@
 #!/bin/sh
 
+which tar
+command -v tar
+command -V tar
+type tar
+tar --version
+type -aP tar
+
 OLDPATH=$PATH
 TEST_PATH=../../xz-test
 
