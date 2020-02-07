@@ -3609,12 +3609,12 @@ nvm_platform_supports_xz() {
   # Hexadecimal dump of an xz-compressed tarball,
   # containing the ASCII letter "a" in a .txt file
   local HEX
-  HEX="fd377a585a000000ff12d941020021011c00000010cf58cce027ff005e5d \
-       00308033501868893016d4ad2bdb3532d1da8f479c58fcef72b55c25ec10 \
-       25db8c681c0ba8af1ac193f8c507ecb9f7c7d76ca240f07b7d799a48d587 \
-       01dc01f719f8b4298006e5a81cdeb5427fea090f8c2593d9c438578ad6c8 \
-       03418cef00000000000172805000000027c754ffa8000afc020000000000 \
-       595a"
+  HEX="fd377a585a000004e6d6b4460200210116000000742fe5a3e027ff005e5d
+       00308033501868893016d4ad2bdb34f89daa8f479c58fcf15b429677e795
+       562538c607b917176cc0736752eaa16d5364314288614dee2be151952e84
+       fd318c857b3bd3d4c3b5ce47986aaeb3c84e5403cb926d1d37d37a39a930
+       e414d61f00000000d26e4062346d7b7b00017a80500000004a450713b1c4
+       67fb020000000004595a"
 
   local EXTRACTED_STRING
   EXTRACTED_STRING="$(nvm_echo "${HEX}" | command xxd -r -p | command tar xJ -O)"
