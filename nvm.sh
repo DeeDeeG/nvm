@@ -3617,7 +3617,7 @@ nvm_platform_supports_xz() {
        595a"
 
   local EXTRACTED_STRING
-  EXTRACTED_STRING="$(nvm_echo "${HEX}" | command xxd -r -p | command tar xJ -O)"
+  EXTRACTED_STRING="$(nvm_echo ${HEX} | command xxd -r -p | command tar xJ -O)"
 
   if [ "$EXTRACTED_STRING" = "a" ]; then
     return 0
