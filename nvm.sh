@@ -3606,7 +3606,15 @@ EOF
 }
 
 nvm_supports_xz() {
-  if [ -z "${1-}" ] || ! command which xz >/dev/null 2>&1; then
+  if [ -z "${1-}" ]; then
+    return 1
+  fi
+
+  if [ "$(command uname -s)" = 'Darwin' ]; then
+    if ! [ -f "/usr/lib/liblzma.dylib" ]; then
+      return 1
+    fi
+  elif ! command which xz >/dev/null 2>&1; then
     return 1
   fi
 
